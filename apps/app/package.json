@@ -1,0 +1,28 @@
+{
+  "name": "@repo/app",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "rspack serve",
+    "build": "rspack build",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/"
+  },
+  "dependencies": {
+    "@shopify/flash-list": "^2.2.0",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-native-sse": "^1.2.1",
+    "react-router-dom": "^7",
+    "zustand": "^5.0.10"
+  },
+  "devDependencies": {
+    "@rspack/cli": "^1",
+    "@rspack/core": "^1",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "css-loader": "^7",
+    "style-loader": "^4",
+    "typescript": "^5"
+  }
+}
