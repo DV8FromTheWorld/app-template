@@ -8,8 +8,8 @@ const appRoot = path.resolve(projectRoot, '../app');
 
 const config = getDefaultConfig(projectRoot);
 
-// 1. Watch all files within the monorepo
-config.watchFolders = [monorepoRoot];
+// 1. Watch all files within the monorepo (merge with defaults)
+config.watchFolders = [...(config.watchFolders || []), monorepoRoot];
 
 // 2. Let Metro know where to resolve packages and in what order
 config.resolver.nodeModulesPaths = [
@@ -18,21 +18,12 @@ config.resolver.nodeModulesPaths = [
   path.resolve(monorepoRoot, 'node_modules'),
 ];
 
-// 3. Force Metro to resolve (sub)dependencies only from the `nodeModulesPaths`
-config.resolver.disableHierarchicalLookup = true;
-
-// 4. Configure source extensions with platform-specific resolution
+// 3. Add platform-specific extensions (merge with defaults)
 // .native.tsx files will be resolved before .tsx on React Native
+const nativeExtensions = ['native.tsx', 'native.ts', 'native.js', 'native.jsx'];
 config.resolver.sourceExts = [
-  'native.tsx',
-  'native.ts',
-  'tsx',
-  'ts',
-  'native.js',
-  'native.jsx',
-  'js',
-  'jsx',
-  'json',
+  ...nativeExtensions,
+  ...(config.resolver.sourceExts || []).filter((ext) => !nativeExtensions.includes(ext)),
 ];
 
 module.exports = config;

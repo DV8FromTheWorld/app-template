@@ -1,4 +1,4 @@
-package com.nccardinal.manga
+package com.template.app
 
 import android.os.Build
 import android.os.Bundle
