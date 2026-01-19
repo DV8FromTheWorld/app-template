@@ -1,0 +1,28 @@
+{
+  "expo": {
+    "name": "App Template",
+    "slug": "app-template",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#c41e3a"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.template.app"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#c41e3a"
+      },
+      "package": "com.template.app"
+    },
+    "plugins": []
+  }
+}
