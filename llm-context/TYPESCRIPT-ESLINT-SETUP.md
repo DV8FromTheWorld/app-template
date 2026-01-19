@@ -39,7 +39,7 @@ Ensure these options are enabled:
 ### Install Dependencies
 
 ```bash
-pnpm add -D eslint @eslint/js typescript-eslint @eslint-react/eslint-plugin eslint-plugin-react-hooks
+pnpm add -D eslint @eslint/js typescript-eslint @eslint-react/eslint-plugin eslint-plugin-react-hooks eslint-plugin-simple-import-sort eslint-config-prettier
 ```
 
 ### Create `eslint.config.js`
@@ -49,6 +49,8 @@ import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import reactPlugin from '@eslint-react/eslint-plugin';
 import reactHooks from 'eslint-plugin-react-hooks';
+import simpleImportSort from 'eslint-plugin-simple-import-sort';
+import eslintConfigPrettier from 'eslint-config-prettier';
 
 export default tseslint.config(
   eslint.configs.recommended,
@@ -74,6 +76,16 @@ export default tseslint.config(
     rules: {
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
+    },
+  },
+  // Import sorting
+  {
+    plugins: {
+      'simple-import-sort': simpleImportSort,
+    },
+    rules: {
+      'simple-import-sort/imports': 'error',
+      'simple-import-sort/exports': 'error',
     },
   },
   {
@@ -128,7 +140,9 @@ export default tseslint.config(
   },
   {
     ignores: ['**/dist/**', '**/node_modules/**', '**/*.js', '**/*.cjs', '**/*.mjs'],
-  }
+  },
+  // Prettier - must be last to disable conflicting rules
+  eslintConfigPrettier
 );
 ```
 
@@ -281,14 +295,62 @@ This improves tree-shaking and makes it clear which imports are types vs values.
 
 ---
 
+## 7. Import Sorting
+
+The `eslint-plugin-simple-import-sort` plugin automatically organizes imports into consistent groups:
+
+```typescript
+// Before (unsorted)
+import { useState } from 'react';
+import styles from './Button.module.css';
+import { Button } from '@/components/Button';
+import type { User } from './types';
+
+// After (sorted)
+import { useState } from 'react';
+
+import type { User } from './types';
+
+import { Button } from '@/components/Button';
+
+import styles from './Button.module.css';
+```
+
+Imports are grouped by:
+1. Side-effect imports (`import './styles.css'`)
+2. Node.js built-ins and external packages
+3. Internal aliases (`@/`)
+4. Relative imports
+5. Style imports
+
+Run `eslint --fix` to auto-sort imports.
+
+---
+
+## 8. Prettier Integration
+
+The `eslint-config-prettier` package disables ESLint rules that conflict with Prettier formatting:
+
+- **Must be last** in the ESLint config array
+- Prevents ESLint from complaining about formatting Prettier handles
+- Allows ESLint to focus on code quality, Prettier on formatting
+
+If using Prettier, always include this to avoid conflicting rules.
+
+---
+
 ## Quick Setup Checklist
 
 1. [ ] Add `"type": "module"` to root `package.json`
-2. [ ] Install ESLint dependencies (including `eslint-plugin-react-hooks`)
-3. [ ] Create `eslint.config.js` with strict-boolean-expressions and hooks rules
+2. [ ] Install ESLint dependencies:
+   - `@eslint/js`, `typescript-eslint`
+   - `@eslint-react/eslint-plugin`, `eslint-plugin-react-hooks`
+   - `eslint-plugin-simple-import-sort`, `eslint-config-prettier`
+3. [ ] Create `eslint.config.js` with strict-boolean-expressions, hooks rules, import sorting
 4. [ ] Add strict tsconfig options (`useUnknownInCatchVariables`, `noImplicitOverride`, etc.)
 5. [ ] Add `lint` script to package.json
 6. [ ] Configure `paths` in tsconfig.json for `@/` alias
 7. [ ] Configure bundler (Rspack/Webpack) with `resolve.alias`
 8. [ ] Configure Babel with `module-resolver` plugin (for React Native)
-9. [ ] Run `pnpm lint` and `pnpm typecheck` and fix any violations
+9. [ ] Run `pnpm lint --fix` to auto-sort imports
+10. [ ] Run `pnpm lint` and `pnpm typecheck` and fix any violations
