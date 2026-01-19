@@ -1,6 +1,6 @@
-# TypeScript & ESLint Strict Boolean Configuration Guide
+# TypeScript & ESLint Strict Configuration Guide
 
-This guide explains how to set up strict boolean expressions and path aliasing in a TypeScript project.
+This guide explains how to set up strict TypeScript, React hooks linting, and path aliasing.
 
 ## 1. TypeScript Configuration (`tsconfig.json`)
 
@@ -10,20 +10,27 @@ Ensure these options are enabled:
 {
   "compilerOptions": {
     "strict": true,
-    "exactOptionalPropertyTypes": true
+    "exactOptionalPropertyTypes": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "useUnknownInCatchVariables": true,
+    "noImplicitOverride": true,
+    "forceConsistentCasingInFileNames": true
   }
 }
 ```
 
-**`exactOptionalPropertyTypes`** requires you to explicitly include `undefined` in optional types:
+### Key Options Explained
 
-```typescript
-// With exactOptionalPropertyTypes: true
-interface User {
-  name: string;
-  bio?: string | undefined;  // Must include | undefined
-}
-```
+| Option | Effect |
+|--------|--------|
+| `exactOptionalPropertyTypes` | Requires `bio?: string \| undefined` (explicit undefined) |
+| `noUncheckedIndexedAccess` | Array access returns `T \| undefined`, forcing null checks |
+| `useUnknownInCatchVariables` | `catch (e)` types `e` as `unknown` instead of `any` |
+| `noImplicitOverride` | Requires `override` keyword when overriding class methods |
+| `noImplicitReturns` | All code paths must return (or not return) |
+| `noFallthroughCasesInSwitch` | Prevents accidental switch case fallthrough |
 
 ---
 
@@ -32,7 +39,7 @@ interface User {
 ### Install Dependencies
 
 ```bash
-pnpm add -D eslint @eslint/js typescript-eslint @eslint-react/eslint-plugin
+pnpm add -D eslint @eslint/js typescript-eslint @eslint-react/eslint-plugin eslint-plugin-react-hooks
 ```
 
 ### Create `eslint.config.js`
@@ -41,6 +48,7 @@ pnpm add -D eslint @eslint/js typescript-eslint @eslint-react/eslint-plugin
 import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import reactPlugin from '@eslint-react/eslint-plugin';
+import reactHooks from 'eslint-plugin-react-hooks';
 
 export default tseslint.config(
   eslint.configs.recommended,
@@ -56,6 +64,17 @@ export default tseslint.config(
   {
     files: ['**/*.tsx', '**/*.ts'],
     ...reactPlugin.configs['recommended-type-checked'],
+  },
+  // React Hooks rules (official React linter)
+  {
+    files: ['**/*.tsx', '**/*.ts'],
+    plugins: {
+      'react-hooks': reactHooks,
+    },
+    rules: {
+      'react-hooks/rules-of-hooks': 'error',
+      'react-hooks/exhaustive-deps': 'warn',
+    },
   },
   {
     rules: {
@@ -79,6 +98,18 @@ export default tseslint.config(
 
       // Prevent {count && <Component />} rendering "0" in JSX
       '@eslint-react/no-leaked-conditional-rendering': 'error',
+
+      // Enforce using `import type` for type-only imports
+      '@typescript-eslint/consistent-type-imports': [
+        'error',
+        {
+          prefer: 'type-imports',
+          fixStyle: 'separate-type-imports',
+        },
+      ],
+
+      // Ensure all cases in switch statements on union types are handled
+      '@typescript-eslint/switch-exhaustiveness-check': 'error',
 
       // Allow unused vars prefixed with _
       '@typescript-eslint/no-unused-vars': [
@@ -197,13 +228,67 @@ import { Text } from '@/design/components/Text/web/Text';
 
 ---
 
+## 5. React Hooks Rules
+
+The `eslint-plugin-react-hooks` package enforces the Rules of Hooks:
+
+| Rule | Severity | Purpose |
+|------|----------|---------|
+| `rules-of-hooks` | error | Ensures hooks are called in the same order every render (no conditionals, loops) |
+| `exhaustive-deps` | warn | Warns when effect dependencies are missing or unnecessary |
+
+### Example Violations
+
+```typescript
+// ❌ Wrong: Hook inside condition
+function Component({ show }) {
+  if (show) {
+    const [count, setCount] = useState(0); // Error!
+  }
+}
+
+// ❌ Wrong: Missing dependency
+function Component({ id }) {
+  useEffect(() => {
+    fetchData(id); // Warning: 'id' should be in dependency array
+  }, []);
+}
+
+// ✅ Correct
+function Component({ id }) {
+  useEffect(() => {
+    fetchData(id);
+  }, [id]);
+}
+```
+
+---
+
+## 6. Type-Only Imports
+
+The `@typescript-eslint/consistent-type-imports` rule enforces using `import type` for type-only imports:
+
+```typescript
+// ❌ Wrong
+import { User, fetchUser } from './api';  // User is only used as a type
+
+// ✅ Correct
+import type { User } from './api';
+import { fetchUser } from './api';
+```
+
+This improves tree-shaking and makes it clear which imports are types vs values.
+
+---
+
 ## Quick Setup Checklist
 
 1. [ ] Add `"type": "module"` to root `package.json`
-2. [ ] Install ESLint dependencies
-3. [ ] Create `eslint.config.js` with strict-boolean-expressions
-4. [ ] Add `lint` script to package.json
-5. [ ] Configure `paths` in tsconfig.json for `@/` alias
-6. [ ] Configure bundler (Rspack/Webpack) with `resolve.alias`
-7. [ ] Configure Babel with `module-resolver` plugin (for React Native)
-8. [ ] Run `pnpm lint` and fix any violations
+2. [ ] Install ESLint dependencies (including `eslint-plugin-react-hooks`)
+3. [ ] Create `eslint.config.js` with strict-boolean-expressions and hooks rules
+4. [ ] Add strict tsconfig options (`useUnknownInCatchVariables`, `noImplicitOverride`, etc.)
+5. [ ] Add `lint` script to package.json
+6. [ ] Configure `paths` in tsconfig.json for `@/` alias
+7. [ ] Configure bundler (Rspack/Webpack) with `resolve.alias`
+8. [ ] Configure Babel with `module-resolver` plugin (for React Native)
+9. [ ] Run `pnpm lint` and `pnpm typecheck` and fix any violations

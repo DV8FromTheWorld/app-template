@@ -1,6 +1,7 @@
 import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import reactPlugin from '@eslint-react/eslint-plugin';
+import reactHooks from 'eslint-plugin-react-hooks';
 
 export default tseslint.config(
   eslint.configs.recommended,
@@ -16,6 +17,17 @@ export default tseslint.config(
   {
     files: ['**/*.tsx', '**/*.ts'],
     ...reactPlugin.configs['recommended-type-checked'],
+  },
+  // React Hooks rules (official React linter)
+  {
+    files: ['**/*.tsx', '**/*.ts'],
+    plugins: {
+      'react-hooks': reactHooks,
+    },
+    rules: {
+      'react-hooks/rules-of-hooks': 'error',
+      'react-hooks/exhaustive-deps': 'warn',
+    },
   },
   {
     rules: {
@@ -63,6 +75,18 @@ export default tseslint.config(
           },
         },
       ],
+
+      // Enforce using `import type` for type-only imports
+      '@typescript-eslint/consistent-type-imports': [
+        'error',
+        {
+          prefer: 'type-imports',
+          fixStyle: 'separate-type-imports',
+        },
+      ],
+
+      // Ensure all cases in switch statements on union types are handled
+      '@typescript-eslint/switch-exhaustiveness-check': 'error',
     },
   },
   {
