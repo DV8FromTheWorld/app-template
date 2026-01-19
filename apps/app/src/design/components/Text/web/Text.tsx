@@ -3,9 +3,11 @@
  * Enforces consistent typography across the app.
  */
 
-import type { ReactNode, CSSProperties } from 'react';
-import type { TextVariant, TextColor, TextTag } from '@/design/types';
+import type { CSSProperties,ReactNode } from 'react';
+
 import { parseVariant } from '@/design/components/Text/variant';
+import type { TextColor, TextTag,TextVariant } from '@/design/types';
+
 import styles from './Text.module.css';
 
 export interface TextProps {

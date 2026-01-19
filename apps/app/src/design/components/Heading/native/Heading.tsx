@@ -3,18 +3,19 @@
  * Renders text with heading-appropriate typography.
  */
 
-import { Text, StyleSheet, useColorScheme } from 'react-native';
 import type { ReactNode } from 'react';
-import type { TextStyle, StyleProp } from 'react-native';
-import type { TextVariant, TextColor } from '@/design/types';
+import type { StyleProp,TextStyle } from 'react-native';
+import { StyleSheet, Text, useColorScheme } from 'react-native';
+
 import { parseVariant } from '@/design/components/Text/variant';
 import {
   colors,
   fontFamily,
   fontSize,
-  headerSize,
   fontWeight as fontWeightValues,
+  headerSize,
 } from '@/design/theme';
+import type { TextColor,TextVariant } from '@/design/types';
 
 type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 

@@ -3,17 +3,18 @@
  * Enforces consistent typography across the app.
  */
 
-import { Text as RNText, StyleSheet, useColorScheme } from 'react-native';
 import type { ReactNode } from 'react';
 import type { StyleProp, TextStyle } from 'react-native';
-import type { TextVariant, TextColor } from '@/design/types';
+import { StyleSheet, Text as RNText, useColorScheme } from 'react-native';
+
 import { parseVariant } from '@/design/components/Text/variant';
 import {
   colors,
   fontSize,
-  headerSize,
   fontWeight as fontWeightValues,
+  headerSize,
 } from '@/design/theme';
+import type { TextColor,TextVariant } from '@/design/types';
 
 export interface TextProps {
   /** The text variant defining size and weight */

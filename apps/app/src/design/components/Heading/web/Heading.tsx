@@ -3,9 +3,11 @@
  * Renders semantic h1-h6 elements with consistent typography.
  */
 
-import type { ReactNode, CSSProperties } from 'react';
-import type { TextVariant, TextColor } from '@/design/types';
+import type { CSSProperties,ReactNode } from 'react';
+
 import { parseVariant } from '@/design/components/Text/variant';
+import type { TextColor,TextVariant } from '@/design/types';
+
 import styles from './Heading.module.css';
 
 type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;

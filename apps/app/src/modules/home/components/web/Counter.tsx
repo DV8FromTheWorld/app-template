@@ -5,7 +5,8 @@
 
 import { Heading } from '@/design/components/Heading/web/Heading';
 import { Text } from '@/design/components/Text/web/Text';
-import { useCounterStore, increment, decrement, reset, selectCount } from '@/modules/home/store';
+import { decrement, increment, reset, selectCount,useCounterStore } from '@/modules/home/store';
+
 import styles from './Counter.module.css';
 
 export function Counter(): JSX.Element {

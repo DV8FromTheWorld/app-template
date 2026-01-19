@@ -3,7 +3,7 @@
  * Shared between web and native Text components.
  */
 
-import type { TextVariant, TextSize, HeaderSize, FontWeight } from '../../types';
+import type { FontWeight,HeaderSize, TextSize, TextVariant } from '../../types';
 
 /**
  * Parsed variant structure.

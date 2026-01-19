@@ -3,9 +3,10 @@
  * Shared between web and native platforms.
  */
 
-import { useState, useEffect, useCallback } from 'react';
-import type { Item } from '@/modules/home/types';
+import { useCallback,useEffect, useState } from 'react';
+
 import { fetchItems } from '@/modules/home/services/itemsApi';
+import type { Item } from '@/modules/home/types';
 
 interface UseItemsResult {
   items: Item[];

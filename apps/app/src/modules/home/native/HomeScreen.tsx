@@ -8,7 +8,8 @@
  * - Component composition
  */
 
-import { View, ScrollView, StyleSheet, useColorScheme, SafeAreaView } from 'react-native';
+import { SafeAreaView,ScrollView, StyleSheet, useColorScheme, View } from 'react-native';
+
 import { Heading } from '@/design/components/Heading/native/Heading';
 import { Text } from '@/design/components/Text/native/Text';
 import { colors, spacing } from '@/design/theme';

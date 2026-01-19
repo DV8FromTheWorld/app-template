@@ -13,6 +13,7 @@ import { Text } from '@/design/components/Text/web/Text';
 import { Counter } from '@/modules/home/components/web/Counter';
 import { ItemList } from '@/modules/home/components/web/ItemList';
 import { useItems } from '@/modules/home/hooks/useItems';
+
 import styles from './HomePage.module.css';
 
 export function HomePage(): JSX.Element {

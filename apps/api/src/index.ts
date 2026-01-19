@@ -1,10 +1,11 @@
-import Fastify from 'fastify';
 import cors from '@fastify/cors';
+import Fastify from 'fastify';
 import {
   serializerCompiler,
   validatorCompiler,
   type ZodTypeProvider,
 } from 'fastify-type-provider-zod';
+
 import { itemRoutes } from './routes/items.js';
 
 const app = Fastify({

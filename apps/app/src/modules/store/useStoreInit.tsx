@@ -14,6 +14,7 @@
  */
 
 import { useEffect, useState } from 'react';
+
 import { initializeAll } from '@/modules/store/registry';
 
 /**

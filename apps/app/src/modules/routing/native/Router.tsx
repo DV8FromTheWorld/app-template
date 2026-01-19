@@ -2,11 +2,13 @@
  * Native router implementation using @react-navigation.
  */
 
+import '@/modules/store/stores'; // Register all store initializers
+
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import '@/modules/store/stores'; // Register all store initializers
-import { useStoreInit } from '@/modules/store/useStoreInit';
+
 import { HomeScreen } from '@/modules/home/native/HomeScreen';
+import { useStoreInit } from '@/modules/store/useStoreInit';
 
 /**
  * Type-safe route params for navigation.

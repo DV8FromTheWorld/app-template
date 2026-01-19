@@ -5,17 +5,18 @@
 
 import { useState } from 'react';
 import {
-  View,
-  TouchableOpacity,
-  TextInput,
   StyleSheet,
+  TextInput,
+  TouchableOpacity,
   useColorScheme,
+  View,
 } from 'react-native';
+
 import { Heading } from '@/design/components/Heading/native/Heading';
 import { Text } from '@/design/components/Text/native/Text';
 import { colors, spacing } from '@/design/theme';
-import type { Item } from '@/modules/home/types';
 import { createItem, deleteItem } from '@/modules/home/services/itemsApi';
+import type { Item } from '@/modules/home/types';
 
 interface ItemListProps {
   items: Item[];

@@ -4,10 +4,12 @@
  */
 
 import { useState } from 'react';
+
 import { Heading } from '@/design/components/Heading/web/Heading';
 import { Text } from '@/design/components/Text/web/Text';
-import type { Item } from '@/modules/home/types';
 import { createItem, deleteItem } from '@/modules/home/services/itemsApi';
+import type { Item } from '@/modules/home/types';
+
 import styles from './ItemList.module.css';
 
 interface ItemListProps {
