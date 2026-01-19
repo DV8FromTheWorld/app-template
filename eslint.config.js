@@ -114,6 +114,15 @@ export default tseslint.config(
 
       // Ensure all cases in switch statements on union types are handled
       '@typescript-eslint/switch-exhaustiveness-check': 'error',
+
+      // Prefer ?? over || for nullish checks (|| treats '' and 0 as falsy)
+      '@typescript-eslint/prefer-nullish-coalescing': 'error',
+
+      // Prefer ?. over && chains for optional access
+      '@typescript-eslint/prefer-optional-chain': 'error',
+
+      // Disallow non-null assertion (!) - forces proper null handling
+      '@typescript-eslint/no-non-null-assertion': 'error',
     },
   },
   {
