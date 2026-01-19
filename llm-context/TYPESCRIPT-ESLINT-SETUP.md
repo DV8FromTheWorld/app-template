@@ -23,14 +23,14 @@ Ensure these options are enabled:
 
 ### Key Options Explained
 
-| Option | Effect |
-|--------|--------|
-| `exactOptionalPropertyTypes` | Requires `bio?: string \| undefined` (explicit undefined) |
-| `noUncheckedIndexedAccess` | Array access returns `T \| undefined`, forcing null checks |
-| `useUnknownInCatchVariables` | `catch (e)` types `e` as `unknown` instead of `any` |
-| `noImplicitOverride` | Requires `override` keyword when overriding class methods |
-| `noImplicitReturns` | All code paths must return (or not return) |
-| `noFallthroughCasesInSwitch` | Prevents accidental switch case fallthrough |
+| Option                       | Effect                                                     |
+| ---------------------------- | ---------------------------------------------------------- |
+| `exactOptionalPropertyTypes` | Requires `bio?: string \| undefined` (explicit undefined)  |
+| `noUncheckedIndexedAccess`   | Array access returns `T \| undefined`, forcing null checks |
+| `useUnknownInCatchVariables` | `catch (e)` types `e` as `unknown` instead of `any`        |
+| `noImplicitOverride`         | Requires `override` keyword when overriding class methods  |
+| `noImplicitReturns`          | All code paths must return (or not return)                 |
+| `noFallthroughCasesInSwitch` | Prevents accidental switch case fallthrough                |
 
 ---
 
@@ -39,7 +39,7 @@ Ensure these options are enabled:
 ### Install Dependencies
 
 ```bash
-pnpm add -D eslint @eslint/js typescript-eslint @eslint-react/eslint-plugin eslint-plugin-react-hooks eslint-plugin-simple-import-sort @eslint-community/eslint-plugin-eslint-comments eslint-config-prettier
+pnpm add -D eslint @eslint/js typescript-eslint @eslint-react/eslint-plugin eslint-plugin-react-hooks eslint-plugin-jsx-a11y eslint-plugin-simple-import-sort @eslint-community/eslint-plugin-eslint-comments eslint-config-prettier
 ```
 
 ### Create `eslint.config.js`
@@ -49,6 +49,7 @@ import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import reactPlugin from '@eslint-react/eslint-plugin';
 import reactHooks from 'eslint-plugin-react-hooks';
+import jsxA11y from 'eslint-plugin-jsx-a11y';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import eslintComments from '@eslint-community/eslint-plugin-eslint-comments';
 import eslintConfigPrettier from 'eslint-config-prettier';
@@ -78,6 +79,11 @@ export default tseslint.config(
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'error',
     },
+  },
+  // Accessibility rules for JSX
+  {
+    files: ['**/*.tsx'],
+    ...jsxA11y.flatConfigs.recommended,
   },
   // Import sorting
   {
@@ -112,10 +118,10 @@ export default tseslint.config(
       '@typescript-eslint/strict-boolean-expressions': [
         'error',
         {
-          allowString: false,        // Disallow: if (str)
-          allowNumber: false,        // Disallow: if (num)
+          allowString: false, // Disallow: if (str)
+          allowNumber: false, // Disallow: if (num)
           allowNullableObject: true, // Allow: if (obj) for objects
-          allowNullableBoolean: true,// Allow: if (bool) for booleans
+          allowNullableBoolean: true, // Allow: if (bool) for booleans
           allowNullableString: false,
           allowNullableNumber: false,
           allowNullableEnum: false,
@@ -137,6 +143,15 @@ export default tseslint.config(
 
       // Ensure all cases in switch statements on union types are handled
       '@typescript-eslint/switch-exhaustiveness-check': 'error',
+
+      // Prefer ?? over || for nullish checks (|| treats '' and 0 as falsy)
+      '@typescript-eslint/prefer-nullish-coalescing': 'error',
+
+      // Prefer ?. over && chains for optional access
+      '@typescript-eslint/prefer-optional-chain': 'error',
+
+      // Disallow non-null assertion (!) - forces proper null handling
+      '@typescript-eslint/no-non-null-assertion': 'error',
 
       // Allow unused vars prefixed with _
       '@typescript-eslint/no-unused-vars': [
@@ -176,12 +191,12 @@ export default tseslint.config(
 
 ## 3. Code Patterns Enforced
 
-| ❌ Wrong | ✅ Correct |
-|----------|-----------|
-| `if (value) { }` | `if (value != null) { }` |
-| `{error && <Error />}` | `{error !== null ? <Error /> : null}` |
-| `{item.name && <Name />}` | `{item.name !== undefined ? <Name /> : null}` |
-| `str ? a : b` (str is string) | `str !== '' ? a : b` |
+| ❌ Wrong                      | ✅ Correct                                    |
+| ----------------------------- | --------------------------------------------- |
+| `if (value) { }`              | `if (value != null) { }`                      |
+| `{error && <Error />}`        | `{error !== null ? <Error /> : null}`         |
+| `{item.name && <Name />}`     | `{item.name !== undefined ? <Name /> : null}` |
+| `str ? a : b` (str is string) | `str !== '' ? a : b`                          |
 
 **Key principle**: Use `!= null` (loose equality) to check both `null` and `undefined` in one check.
 
@@ -261,10 +276,10 @@ import { Text } from '@/design/components/Text/web/Text';
 
 The `eslint-plugin-react-hooks` package enforces the Rules of Hooks:
 
-| Rule | Severity | Purpose |
-|------|----------|---------|
-| `rules-of-hooks` | error | Ensures hooks are called in the same order every render (no conditionals, loops) |
-| `exhaustive-deps` | warn | Warns when effect dependencies are missing or unnecessary |
+| Rule              | Severity | Purpose                                                                          |
+| ----------------- | -------- | -------------------------------------------------------------------------------- |
+| `rules-of-hooks`  | error    | Ensures hooks are called in the same order every render (no conditionals, loops) |
+| `exhaustive-deps` | error    | Errors when effect dependencies are missing or unnecessary                       |
 
 ### Example Violations
 
@@ -299,7 +314,7 @@ The `@typescript-eslint/consistent-type-imports` rule enforces using `import typ
 
 ```typescript
 // ❌ Wrong
-import { User, fetchUser } from './api';  // User is only used as a type
+import { User, fetchUser } from './api'; // User is only used as a type
 
 // ✅ Correct
 import type { User } from './api';
@@ -332,6 +347,7 @@ import styles from './Button.module.css';
 ```
 
 Imports are grouped by:
+
 1. Side-effect imports (`import './styles.css'`)
 2. Node.js built-ins and external packages
 3. Internal aliases (`@/`)
@@ -358,11 +374,11 @@ If using Prettier, always include this to avoid conflicting rules.
 
 The `@eslint-community/eslint-plugin-eslint-comments` package enforces good practices for `eslint-disable` comments:
 
-| Rule | Purpose |
-|------|---------|
-| `require-description` | Every `eslint-disable` must include an explanation |
-| `no-unlimited-disable` | Must specify which rule(s) to disable |
-| `no-unused-disable` | Error if disable comment isn't needed |
+| Rule                   | Purpose                                            |
+| ---------------------- | -------------------------------------------------- |
+| `require-description`  | Every `eslint-disable` must include an explanation |
+| `no-unlimited-disable` | Must specify which rule(s) to disable              |
+| `no-unused-disable`    | Error if disable comment isn't needed              |
 
 ### Example
 
@@ -384,19 +400,116 @@ This ensures every rule suppression is documented and intentional.
 
 ---
 
+## 10. Accessibility (jsx-a11y)
+
+The `eslint-plugin-jsx-a11y` plugin catches accessibility issues in JSX:
+
+```tsx
+// ❌ Wrong - missing alt
+<img src="photo.jpg" />
+
+// ✅ Correct
+<img src="photo.jpg" alt="A sunset over mountains" />
+
+// ❌ Wrong - click on non-interactive element
+<div onClick={handleClick}>Click me</div>
+
+// ✅ Correct - use button
+<button onClick={handleClick}>Click me</button>
+```
+
+---
+
+## 11. Nullish Coalescing & Optional Chaining
+
+### prefer-nullish-coalescing
+
+```typescript
+// ❌ Wrong - || treats '' and 0 as falsy
+const name = user.name || 'Anonymous';
+
+// ✅ Correct - ?? only triggers on null/undefined
+const name = user.name ?? 'Anonymous';
+```
+
+### prefer-optional-chain
+
+```typescript
+// ❌ Wrong - verbose && chains
+const street = user && user.address && user.address.street;
+
+// ✅ Correct - cleaner optional chain
+const street = user?.address?.street;
+```
+
+### no-non-null-assertion
+
+```typescript
+// ❌ Wrong - ! bypasses null checking
+const user = getUser(); // returns User | null
+console.log(user!.name); // Runtime error if null!
+
+// ✅ Correct - explicit null handling
+const user = getUser();
+if (user == null) {
+  throw new Error('User not found');
+}
+console.log(user.name);
+```
+
+When `!` is truly needed, use eslint-disable with explanation:
+
+```typescript
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- element guaranteed in index.html
+document.getElementById('root')!;
+```
+
+---
+
+## 12. Pre-commit Hooks (husky + lint-staged)
+
+### Install
+
+```bash
+pnpm add -D husky lint-staged
+pnpm exec husky init
+```
+
+### Configure lint-staged in package.json
+
+```json
+{
+  "lint-staged": {
+    "*.{ts,tsx}": ["eslint --fix", "prettier --write"],
+    "*.{js,cjs,mjs,json,md,css}": ["prettier --write"]
+  }
+}
+```
+
+### Update .husky/pre-commit
+
+```bash
+pnpm exec lint-staged
+```
+
+This runs ESLint and Prettier on staged files before every commit, preventing bad code from being committed.
+
+---
+
 ## Quick Setup Checklist
 
 1. [ ] Add `"type": "module"` to root `package.json`
 2. [ ] Install ESLint dependencies:
    - `@eslint/js`, `typescript-eslint`
-   - `@eslint-react/eslint-plugin`, `eslint-plugin-react-hooks`
+   - `@eslint-react/eslint-plugin`, `eslint-plugin-react-hooks`, `eslint-plugin-jsx-a11y`
    - `eslint-plugin-simple-import-sort`, `@eslint-community/eslint-plugin-eslint-comments`
    - `eslint-config-prettier`
-3. [ ] Create `eslint.config.js` with strict-boolean-expressions, hooks rules, import sorting, comment rules
+3. [ ] Create `eslint.config.js` with all rules (see config above)
 4. [ ] Add strict tsconfig options (`useUnknownInCatchVariables`, `noImplicitOverride`, etc.)
 5. [ ] Add `lint` script to package.json
 6. [ ] Configure `paths` in tsconfig.json for `@/` alias
 7. [ ] Configure bundler (Rspack/Webpack) with `resolve.alias`
 8. [ ] Configure Babel with `module-resolver` plugin (for React Native)
-9. [ ] Run `pnpm lint --fix` to auto-sort imports
-10. [ ] Run `pnpm lint` and `pnpm typecheck` and fix any violations
+9. [ ] Install and configure husky + lint-staged for pre-commit hooks
+10. [ ] Run `pnpm lint --fix` to auto-sort imports
+11. [ ] Run `pnpm lint` and `pnpm typecheck` and fix any violations
