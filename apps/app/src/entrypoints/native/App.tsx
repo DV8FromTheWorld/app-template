@@ -5,6 +5,6 @@
 
 import { Router } from '@/modules/routing/native/Router';
 
-export function App(): JSX.Element {
+export function App(): React.JSX.Element {
   return <Router />;
 }

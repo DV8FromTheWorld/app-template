@@ -3,10 +3,10 @@
  * Enforces consistent typography across the app.
  */
 
-import type { CSSProperties,ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 
 import { parseVariant } from '@/design/components/Text/variant';
-import type { TextColor, TextTag,TextVariant } from '@/design/types';
+import type { TextColor, TextTag, TextVariant } from '@/design/types';
 
 import styles from './Text.module.css';
 
@@ -91,18 +91,12 @@ export function Text({
   'aria-label': ariaLabel,
   'aria-describedby': ariaDescribedBy,
   htmlFor,
-}: TextProps): JSX.Element {
+}: TextProps): React.JSX.Element {
   const sizeClass = getSizeClass(variant);
   const weightClass = getWeightClass(variant);
   const colorClass = getColorClass(color);
 
-  const combinedClassName = [
-    styles.text,
-    sizeClass,
-    weightClass,
-    colorClass,
-    className,
-  ]
+  const combinedClassName = [styles.text, sizeClass, weightClass, colorClass, className]
     .filter(Boolean)
     .join(' ');
 

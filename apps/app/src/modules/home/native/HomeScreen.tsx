@@ -8,7 +8,7 @@
  * - Component composition
  */
 
-import { SafeAreaView,ScrollView, StyleSheet, useColorScheme, View } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, useColorScheme, View } from 'react-native';
 
 import { Heading } from '@/design/components/Heading/native/Heading';
 import { Text } from '@/design/components/Text/native/Text';
@@ -17,7 +17,7 @@ import { Counter } from '@/modules/home/components/native/Counter';
 import { ItemList } from '@/modules/home/components/native/ItemList';
 import { useItems } from '@/modules/home/hooks/useItems';
 
-export function HomeScreen(): JSX.Element {
+export function HomeScreen(): React.JSX.Element {
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
   const theme = isDark ? colors.dark : colors.light;

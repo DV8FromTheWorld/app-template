@@ -3,10 +3,10 @@
  * Renders semantic h1-h6 elements with consistent typography.
  */
 
-import type { CSSProperties,ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 
 import { parseVariant } from '@/design/components/Text/variant';
-import type { TextColor,TextVariant } from '@/design/types';
+import type { TextColor, TextVariant } from '@/design/types';
 
 import styles from './Heading.module.css';
 
@@ -83,7 +83,7 @@ export function Heading({
   className,
   style,
   id,
-}: HeadingProps): JSX.Element {
+}: HeadingProps): React.JSX.Element {
   const Tag = `h${level}` as const;
 
   // Build class list

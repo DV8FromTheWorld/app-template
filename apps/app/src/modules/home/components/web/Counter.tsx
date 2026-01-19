@@ -5,11 +5,11 @@
 
 import { Heading } from '@/design/components/Heading/web/Heading';
 import { Text } from '@/design/components/Text/web/Text';
-import { decrement, increment, reset, selectCount,useCounterStore } from '@/modules/home/store';
+import { decrement, increment, reset, selectCount, useCounterStore } from '@/modules/home/store';
 
 import styles from './Counter.module.css';
 
-export function Counter(): JSX.Element {
+export function Counter(): React.JSX.Element {
   const count = useCounterStore(selectCount);
 
   return (

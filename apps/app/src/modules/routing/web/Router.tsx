@@ -16,7 +16,7 @@ const router = createBrowserRouter([
   },
 ]);
 
-export function Router(): JSX.Element {
+export function Router(): React.JSX.Element {
   // Initialize all registered stores on app start
   useStoreInit();
 

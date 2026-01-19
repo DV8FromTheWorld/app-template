@@ -3,8 +3,7 @@
  * Renders text with heading-appropriate typography.
  */
 
-import type { ReactNode } from 'react';
-import type { StyleProp,TextStyle } from 'react-native';
+import type { StyleProp, TextProps, TextStyle } from 'react-native';
 import { StyleSheet, Text, useColorScheme } from 'react-native';
 
 import { parseVariant } from '@/design/components/Text/variant';
@@ -15,7 +14,7 @@ import {
   fontWeight as fontWeightValues,
   headerSize,
 } from '@/design/theme';
-import type { TextColor,TextVariant } from '@/design/types';
+import type { TextColor, TextVariant } from '@/design/types';
 
 type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
@@ -27,7 +26,7 @@ interface HeadingProps {
   /** Text color from the design system */
   color?: TextColor | undefined;
   /** Content to render */
-  children: ReactNode;
+  children: TextProps['children'];
   /** Additional styles */
   style?: StyleProp<TextStyle> | undefined;
   /** Number of lines before truncating */
@@ -133,7 +132,7 @@ function getWeightStyle(variant: TextVariant): TextStyle {
  */
 function getColorValue(
   colorToken: TextColor,
-  themeColors: typeof colors.light,
+  themeColors: typeof colors.light
 ): string | undefined {
   switch (colorToken) {
     case 'text-primary':
@@ -171,7 +170,7 @@ export function Heading({
   children,
   style,
   numberOfLines,
-}: HeadingProps): JSX.Element {
+}: HeadingProps): React.JSX.Element {
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
   const themeColors = isDark ? colors.dark : colors.light;

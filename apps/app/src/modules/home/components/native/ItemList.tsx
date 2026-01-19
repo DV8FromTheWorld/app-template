@@ -4,13 +4,7 @@
  */
 
 import { useState } from 'react';
-import {
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  useColorScheme,
-  View,
-} from 'react-native';
+import { StyleSheet, TextInput, TouchableOpacity, useColorScheme, View } from 'react-native';
 
 import { Heading } from '@/design/components/Heading/native/Heading';
 import { Text } from '@/design/components/Text/native/Text';
@@ -32,7 +26,7 @@ export function ItemList({
   error,
   onItemsChange,
   onError,
-}: ItemListProps): JSX.Element {
+}: ItemListProps): React.JSX.Element {
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
   const theme = isDark ? colors.dark : colors.light;
@@ -119,10 +113,7 @@ export function ItemList({
           {items.map((item) => (
             <View
               key={item.id}
-              style={[
-                styles.item,
-                { backgroundColor: theme.bgPrimary, borderColor: theme.border },
-              ]}
+              style={[styles.item, { backgroundColor: theme.bgPrimary, borderColor: theme.border }]}
             >
               <View style={styles.itemContent}>
                 <Text variant="text-md/medium">{item.name}</Text>

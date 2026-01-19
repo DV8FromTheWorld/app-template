@@ -26,7 +26,7 @@ export function ItemList({
   error,
   onItemsChange,
   onError,
-}: ItemListProps): JSX.Element {
+}: ItemListProps): React.JSX.Element {
   const [newItemName, setNewItemName] = useState('');
 
   async function handleCreateItem(e: React.FormEvent): Promise<void> {

@@ -16,7 +16,7 @@ import { useItems } from '@/modules/home/hooks/useItems';
 
 import styles from './HomePage.module.css';
 
-export function HomePage(): JSX.Element {
+export function HomePage(): React.JSX.Element {
   const { items, isLoading, error, setItems, setError } = useItems();
 
   return (

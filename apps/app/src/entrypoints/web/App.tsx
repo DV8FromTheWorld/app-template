@@ -7,6 +7,6 @@ import '@/styles/variables.css';
 
 import { Router } from '@/modules/routing/web/Router';
 
-export function App(): JSX.Element {
+export function App(): React.JSX.Element {
   return <Router />;
 }

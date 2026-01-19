@@ -3,14 +3,14 @@
  * Demonstrates Zustand store with cross-platform persistence.
  */
 
-import { StyleSheet, TouchableOpacity, useColorScheme,View } from 'react-native';
+import { StyleSheet, TouchableOpacity, useColorScheme, View } from 'react-native';
 
 import { Heading } from '@/design/components/Heading/native/Heading';
 import { Text } from '@/design/components/Text/native/Text';
 import { colors, spacing } from '@/design/theme';
-import { decrement, increment, reset, selectCount,useCounterStore } from '@/modules/home/store';
+import { decrement, increment, reset, selectCount, useCounterStore } from '@/modules/home/store';
 
-export function Counter(): JSX.Element {
+export function Counter(): React.JSX.Element {
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
   const theme = isDark ? colors.dark : colors.light;

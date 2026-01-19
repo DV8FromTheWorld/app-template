@@ -3,18 +3,12 @@
  * Enforces consistent typography across the app.
  */
 
-import type { ReactNode } from 'react';
-import type { StyleProp, TextStyle } from 'react-native';
+import type { StyleProp, TextProps as RNTextProps, TextStyle } from 'react-native';
 import { StyleSheet, Text as RNText, useColorScheme } from 'react-native';
 
 import { parseVariant } from '@/design/components/Text/variant';
-import {
-  colors,
-  fontSize,
-  fontWeight as fontWeightValues,
-  headerSize,
-} from '@/design/theme';
-import type { TextColor,TextVariant } from '@/design/types';
+import { colors, fontSize, fontWeight as fontWeightValues, headerSize } from '@/design/theme';
+import type { TextColor, TextVariant } from '@/design/types';
 
 export interface TextProps {
   /** The text variant defining size and weight */
@@ -22,7 +16,7 @@ export interface TextProps {
   /** Text color from the design system */
   color?: TextColor | undefined;
   /** Child content */
-  children: ReactNode;
+  children: RNTextProps['children'];
   /** Additional styles */
   style?: StyleProp<TextStyle> | undefined;
   /** Number of lines before truncating */
@@ -94,7 +88,7 @@ function getWeightStyle(variant: TextVariant): TextStyle {
  */
 function getColorValue(
   colorToken: TextColor,
-  themeColors: typeof colors.light,
+  themeColors: typeof colors.light
 ): string | undefined {
   switch (colorToken) {
     case 'text-primary':
@@ -134,7 +128,7 @@ export function Text({
   selectable,
   accessibilityLabel,
   accessibilityRole,
-}: TextProps): JSX.Element {
+}: TextProps): React.JSX.Element {
   const colorScheme = useColorScheme();
   const themeColors = colorScheme === 'dark' ? colors.dark : colors.light;
 
