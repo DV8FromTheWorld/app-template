@@ -39,7 +39,7 @@ Ensure these options are enabled:
 ### Install Dependencies
 
 ```bash
-pnpm add -D eslint @eslint/js typescript-eslint @eslint-react/eslint-plugin eslint-plugin-react-hooks eslint-plugin-simple-import-sort eslint-config-prettier
+pnpm add -D eslint @eslint/js typescript-eslint @eslint-react/eslint-plugin eslint-plugin-react-hooks eslint-plugin-simple-import-sort @eslint-community/eslint-plugin-eslint-comments eslint-config-prettier
 ```
 
 ### Create `eslint.config.js`
@@ -50,6 +50,7 @@ import tseslint from 'typescript-eslint';
 import reactPlugin from '@eslint-react/eslint-plugin';
 import reactHooks from 'eslint-plugin-react-hooks';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
+import eslintComments from '@eslint-community/eslint-plugin-eslint-comments';
 import eslintConfigPrettier from 'eslint-config-prettier';
 
 export default tseslint.config(
@@ -86,6 +87,20 @@ export default tseslint.config(
     rules: {
       'simple-import-sort/imports': 'error',
       'simple-import-sort/exports': 'error',
+    },
+  },
+  // ESLint directive comments (require explanations for eslint-disable)
+  {
+    plugins: {
+      '@eslint-community/eslint-comments': eslintComments,
+    },
+    rules: {
+      '@eslint-community/eslint-comments/require-description': [
+        'error',
+        { ignore: ['eslint-enable'] },
+      ],
+      '@eslint-community/eslint-comments/no-unlimited-disable': 'error',
+      '@eslint-community/eslint-comments/no-unused-disable': 'error',
     },
   },
   {
@@ -339,14 +354,45 @@ If using Prettier, always include this to avoid conflicting rules.
 
 ---
 
+## 9. ESLint Disable Comments
+
+The `@eslint-community/eslint-plugin-eslint-comments` package enforces good practices for `eslint-disable` comments:
+
+| Rule | Purpose |
+|------|---------|
+| `require-description` | Every `eslint-disable` must include an explanation |
+| `no-unlimited-disable` | Must specify which rule(s) to disable |
+| `no-unused-disable` | Error if disable comment isn't needed |
+
+### Example
+
+```typescript
+// ❌ Wrong - no explanation
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const data: any = response;
+
+// ❌ Wrong - disables all rules
+// eslint-disable-next-line
+const data: any = response;
+
+// ✅ Correct - specific rule with explanation
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- API returns untyped JSON
+const data: any = response;
+```
+
+This ensures every rule suppression is documented and intentional.
+
+---
+
 ## Quick Setup Checklist
 
 1. [ ] Add `"type": "module"` to root `package.json`
 2. [ ] Install ESLint dependencies:
    - `@eslint/js`, `typescript-eslint`
    - `@eslint-react/eslint-plugin`, `eslint-plugin-react-hooks`
-   - `eslint-plugin-simple-import-sort`, `eslint-config-prettier`
-3. [ ] Create `eslint.config.js` with strict-boolean-expressions, hooks rules, import sorting
+   - `eslint-plugin-simple-import-sort`, `@eslint-community/eslint-plugin-eslint-comments`
+   - `eslint-config-prettier`
+3. [ ] Create `eslint.config.js` with strict-boolean-expressions, hooks rules, import sorting, comment rules
 4. [ ] Add strict tsconfig options (`useUnknownInCatchVariables`, `noImplicitOverride`, etc.)
 5. [ ] Add `lint` script to package.json
 6. [ ] Configure `paths` in tsconfig.json for `@/` alias

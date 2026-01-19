@@ -5,7 +5,7 @@ Summary of changes to import into another project.
 ## 1. Install New Dependencies
 
 ```bash
-pnpm add -D eslint-plugin-react-hooks eslint-plugin-simple-import-sort eslint-config-prettier
+pnpm add -D eslint-plugin-react-hooks eslint-plugin-simple-import-sort eslint-config-prettier @eslint-community/eslint-plugin-eslint-comments
 ```
 
 ## 2. Update `eslint.config.js`
@@ -15,6 +15,7 @@ pnpm add -D eslint-plugin-react-hooks eslint-plugin-simple-import-sort eslint-co
 ```javascript
 import reactHooks from 'eslint-plugin-react-hooks';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
+import eslintComments from '@eslint-community/eslint-plugin-eslint-comments';
 import eslintConfigPrettier from 'eslint-config-prettier';
 ```
 
@@ -40,6 +41,20 @@ import eslintConfigPrettier from 'eslint-config-prettier';
   rules: {
     'simple-import-sort/imports': 'error',
     'simple-import-sort/exports': 'error',
+  },
+},
+// ESLint directive comments (require explanations for eslint-disable)
+{
+  plugins: {
+    '@eslint-community/eslint-comments': eslintComments,
+  },
+  rules: {
+    '@eslint-community/eslint-comments/require-description': [
+      'error',
+      { ignore: ['eslint-enable'] },
+    ],
+    '@eslint-community/eslint-comments/no-unlimited-disable': 'error',
+    '@eslint-community/eslint-comments/no-unused-disable': 'error',
   },
 },
 ```
@@ -96,10 +111,13 @@ pnpm typecheck
 | Addition | Purpose |
 |----------|---------|
 | `react-hooks/rules-of-hooks` | No hooks in conditionals/loops |
-| `react-hooks/exhaustive-deps` | Warn about missing effect dependencies |
+| `react-hooks/exhaustive-deps` | Error on missing effect dependencies |
 | `consistent-type-imports` | Enforce `import type {}` for types |
 | `switch-exhaustiveness-check` | Ensure all union cases handled in switches |
 | `simple-import-sort` | Auto-sort imports into consistent groups |
 | `eslint-config-prettier` | Disable rules that conflict with Prettier |
+| `require-description` | Require explanation on `eslint-disable` comments |
+| `no-unlimited-disable` | Disallow `eslint-disable` without specific rule names |
+| `no-unused-disable` | Error on `eslint-disable` that aren't needed |
 | `useUnknownInCatchVariables` | `catch(e)` types `e` as `unknown` not `any` |
 | `noImplicitOverride` | Require `override` keyword on class method overrides |
